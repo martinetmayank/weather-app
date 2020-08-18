@@ -3,6 +3,7 @@ const request = require('request')
 const API = 'f6e2f08f428e4add899986d425d6872f'
 const URL = 'https://api.darksky.net/forecast/f6e2f08f428e4add899986d425d6872f/37.8267,-122.4233?units=ca'
 
+
 request({
     url: URL,
     json: true
@@ -20,4 +21,23 @@ request({
     console.log('Wind Speed is ' + windSpeed + ' mps')
     console.log('Visibility: ' + visibility)
     console.log('Summary: ' + summary)
+})
+
+
+/*
+Geocoding Services
+I'm using MapBox API for this purpose.
+Address -> Lat/Lon pair -> DarkSky API -> Result
+*/
+
+const MapBoxAPI = 'pk.eyJ1IjoibWFydGluZXRtYXlhbmsiLCJhIjoiY2tlMGJqOHQ2MXJtOTMwb3NkMGFvc254biJ9.r2mocrfZoiLzOWMA_7GpSw'
+const geoCodingURL = 'https://api.mapbox.com/geocoding/v5/mapbox.places/Los%20Angeles.json?access_token=pk.eyJ1IjoibWFydGluZXRtYXlhbmsiLCJhIjoiY2tlMGJqOHQ2MXJtOTMwb3NkMGFvc254biJ9.r2mocrfZoiLzOWMA_7GpSw&limit=1'
+
+request({
+    url: geoCodingURL,
+    json: true
+}, (error, response) => {
+    const latitude = response.body.features[0].center[1]
+    const longitude = response.body.features[0].center[0]
+    console.log(latitude, longitude)
 })
