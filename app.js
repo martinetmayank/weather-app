@@ -1,11 +1,23 @@
 const request = require('request')
 
 const API = 'f6e2f08f428e4add899986d425d6872f'
-const URL = 'https://api.darksky.net/forecast/f6e2f08f428e4add899986d425d6872f/37.8267,-122.4233'
+const URL = 'https://api.darksky.net/forecast/f6e2f08f428e4add899986d425d6872f/37.8267,-122.4233?units=ca'
 
 request({
-    url: URL
+    url: URL,
+    json: true
 }, (error, response) => {
-    const data = JSON.parse(response.body)
-    console.log(data.currently)
+    const temperature = response.body.currently.temperature
+    const rainChance = response.body.currently.precipProbability
+    const humidity = response.body.currently.humidity
+    const visibility = response.body.currently.visibility
+    const windSpeed = response.body.currently.windSpeed
+    const summary = response.body.daily.data[0].summary
+
+    console.log('Temperature ' + temperature + ' degree celsius.')
+    console.log('There is ' + rainChance + '% chance of rain today.')
+    console.log('Humidity: ' + humidity)
+    console.log('Wind Speed is ' + windSpeed + ' mps')
+    console.log('Visibility: ' + visibility)
+    console.log('Summary: ' + summary)
 })
