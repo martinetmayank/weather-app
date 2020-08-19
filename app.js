@@ -1,5 +1,6 @@
 const request = require('request')
-
+const geocode = require('./utils/geocode')
+/*
 const API = 'f6e2f08f428e4add899986d425d6872f'
 const URL = 'https://api.darksky.net/forecast/f6e2f08f428e4add899986d425d6872f/37.8267,-122.4233?units=ca'
 
@@ -31,29 +32,8 @@ request({
 
     }
 })
-
-
-/*
-Geocoding Services
-I'm using MapBox API for this purpose.
-Address -> Lat/Lon pair -> DarkSky API -> Result
 */
 
-const MapBoxAPI = 'pk.eyJ1IjoibWFydGluZXRtYXlhbmsiLCJhIjoiY2tlMGJqOHQ2MXJtOTMwb3NkMGFvc254biJ9.r2mocrfZoiLzOWMA_7GpSw'
-const geoCodeURL = 'https://api.mapbox.com/geocoding/v5/mapbox.places/gurgaon.json?access_token=pk.eyJ1IjoibWFydGluZXRtYXlhbmsiLCJhIjoiY2tlMGJqOHQ2MXJtOTMwb3NkMGFvc254biJ9.r2mocrfZoiLzOWMA_7GpSw&limit=1'
-
-request({
-    url: geoCodeURL,
-    json: true
-}, (error, response) => {
-    if (error) {
-        console.log('Unable to connect to geoCoding Service...')
-    } else if (response.body.features.length === 0) {
-        console.log('Unable to find location, try another search...')
-
-    } else {
-        const latitude = response.body.features[0].center[1]
-        const longitude = response.body.features[0].center[0]
-        console.log(latitude, longitude)
-    }
+geocode('Gurgaon', (error, data) => {
+    console.log(error, data)
 })
