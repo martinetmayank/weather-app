@@ -1,39 +1,25 @@
-const request = require('request')
 const geocode = require('./utils/geocode')
-/*
-const API = 'f6e2f08f428e4add899986d425d6872f'
-const URL = 'https://api.darksky.net/forecast/f6e2f08f428e4add899986d425d6872f/37.8267,-122.4233?units=ca'
+const forecast = require('./utils/forecast')
 
+const address = process.argv[2]
 
-request({
-    url: URL,
-    json: true
-}, (error, response) => {
+if (address) {
+    geocode(address, (error, locationData) => {
 
-    if (error) {
-        console.log('Unable to connect to weather service...')
-    } else if (response.body.error) {
-        console.log('Unable to find location...')
-    } else {
+        if (error) {
+            return console.log(error)
+        }
 
-        const temperature = response.body.currently.temperature
-        const rainChance = response.body.currently.precipProbability
-        const humidity = response.body.currently.humidity
-        const visibility = response.body.currently.visibility
-        const windSpeed = response.body.currently.windSpeed
-        const summary = response.body.daily.data[0].summary
+        forecast(locationData.latitude, locationData.longitude, (error, forecastData) => {
+            if (error) {
+                return console.log(error)
+            }
 
-        console.log('Temperature ' + temperature + ' degree celsius.')
-        console.log('There is ' + rainChance + '% chance of rain today.')
-        console.log('Humidity: ' + humidity)
-        console.log('Wind Speed is ' + windSpeed + ' mps')
-        console.log('Visibility: ' + visibility)
-        console.log('Summary: ' + summary)
+            console.log('Location: ' + locationData.location)
+            console.log(forecastData)
+        })
 
-    }
-})
-*/
-
-geocode('Gurgaon', (error, data) => {
-    console.log(error, data)
-})
+    })
+} else {
+    console.log('Please provide an address...')
+}
