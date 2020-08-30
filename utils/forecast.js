@@ -3,24 +3,32 @@ const request = require('request')
 
 const forecast = (latitude, longitude, callback) => {
     const API = 'f6e2f08f428e4add899986d425d6872f'
-    const URL = 'https://api.darksky.net/forecast/' + API + '/' + latitude+ ',' + longitude + '?units=ca'
+    const url = 'https://api.darksky.net/forecast/' + API + '/' + latitude + ',' + longitude + '?units=ca'
 
     request({
-        url: URL,
+        url,
         json: true
-    }, (error, response) => {
+    }, (error, {
+        body
+    }) => {
+        /**
+         * Since we are using only one property of repsonse,
+         * we can destructure it and
+         * change all the occurences of 'response.body' to 'body'
+         */
+
         if (error) {
             callback('Unable to connect ot weather service...', undefined)
-        } else if (response.body.error) {
+        } else if (body.error) {
             callback('Unable to find location...', undefined)
         } else {
             callback(undefined, {
-                temperature : response.body.currently.temperature,
-                rainChance : response.body.currently.precipProbability,
-                humidity : response.body.currently.humidity,
-                visibility : response.body.currently.visibility,
-                windSpeed : response.body.currently.windSpeed,
-                summary : response.body.daily.data[0].summary,
+                temperature: body.currently.temperature,
+                rainChance: body.currently.precipProbability,
+                humidity: body.currently.humidity,
+                visibility: body.currently.visibility,
+                windSpeed: body.currently.windSpeed,
+                summary: body.daily.data[0].summary,
             })
         }
     })

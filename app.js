@@ -4,18 +4,27 @@ const forecast = require('./utils/forecast')
 const address = process.argv[2]
 
 if (address) {
-    geocode(address, (error, locationData) => {
+    /**
+     * geocode takes two arguments, 'address' and 'callback'
+     * callback has 'error' and 'data'
+     * if data, we get three output: latitude, longitude, location
+     */
+    geocode(address, (error, {
+        latitude,
+        longitude,
+        location
+    }) => {
 
         if (error) {
             return console.log(error)
         }
 
-        forecast(locationData.latitude, locationData.longitude, (error, forecastData) => {
+        forecast(latitude, longitude, (error, forecastData) => {
             if (error) {
                 return console.log(error)
             }
 
-            console.log('Location: ' + locationData.location)
+            console.log('Location: ' + location)
             console.log(forecastData)
         })
 
